@@ -1,4 +1,3 @@
-assignments = []
 
 def assign_value(values, box, value):
     """
@@ -23,8 +22,29 @@ def naked_twins(values):
     # Eliminate the naked twins as possibilities for their peers
 
 def cross(A, B):
-    "Cross product of elements in A and elements in B."
-    pass
+    """
+    Cross product of elements in A and elements in B.
+    Args:
+        A(iterable)
+        B(iterable)
+    """
+    return [s + t for s in A for t in B]
+
+assignments = []
+rows = 'ABCDEFGHI'
+cols = '123456789'
+
+boxes = cross(rows, cols)
+
+#Adding diagonal_units should make it work for diagonal puzzles
+row_units = [cross(r, cols) for r in rows]
+col_units = [cross(rows, c) for c in cols]
+square_units = [cross(rs, cs) for rs in ['ABC', 'DEF', 'GHI'] for cs in ['123','456','789']]
+diagonal_units = [[rows[i] + cols[i] for i in range(0,9)],[rows[i] + cols[8 - i] for i in range(0,9)]]
+unitlist = row_units + col_units + square_units #Array of units
+units = dict((s, [u for u in unitlist if s in u]) for s in boxes) # differents units belonging to s
+peers = dict((s, set(sum(units[s], [])) - set(s)) for s in boxes) # all elements in s's units save s
+
 
 def grid_values(grid):
     """
@@ -36,15 +56,39 @@ def grid_values(grid):
             Keys: The boxes, e.g., 'A1'
             Values: The value in each box, e.g., '8'. If the box has no value, then the value will be '123456789'.
     """
-    pass
+    boxes = cross('ABCDEFGHI', '123456789')
+    dict = {}
+    for i, char in enumerate(grid):
+        dict[boxes[i]] = char if char != '.' else '123456789'
+    return dict
 
-def display(values):
+def display_attempt(values):
     """
     Display the values as a 2-D grid.
     Args:
         values(dict): The sudoku in dictionary form
     """
-    pass
+    output = ''
+    width = 1 + max([len(values[k]) for k in values])
+    for key in sorted(values):
+        output += ' '*((width - len(values[key]))/2) + values[key]  + ' '*((width - len(values[key]))/2)
+        output +=  '|' if int(key[1]) % 3 == 0 else ''
+        output += '\n' if int(key[1]) % 9 == 0 else ''
+    return output
+
+def display(values):
+    """
+    Display the values as a 2-D grid.
+    Input: The sudoku in dictionary form
+    Output: None
+    """
+    width = 1+max(len(values[s]) for s in boxes)
+    line = '+'.join(['-'*(width*3)]*3)
+    for r in rows:
+        print(''.join(values[r+c].center(width)+('|' if c in '36' else '')
+                      for c in cols))
+        if r in 'CF': print(line)
+    return
 
 def eliminate(values):
     pass
