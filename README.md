@@ -3,17 +3,17 @@
 
 # Question 1 (Naked Twins)
 Q: How do we use constraint propagation to solve the naked twins problem?  
-A: *Student should provide answer here*
+A: We take a local constraint, and iterate over all local instances to implement it globally.  Here our local constraint is that if two boxes have the same possible two elements, then those two elements must exist only in those boxes, and must be removed as candidates in the other boxes in the peers.  Here, constraint propagation is the step where we reduce our space of possibilities for the search by ruling out some combinations as contradicting our constraints.
 
 # Question 2 (Diagonal Sudoku)
 Q: How do we use constraint propagation to solve the diagonal sudoku problem?  
-A: *Student should provide answer here*
+A: We use constraint propagation here every time we check against the diagonal unit in functions `eliminate`, `only_choice`, and `naked_twins`.  Requiring a permutation of 1-9 on the diagonal, and reducing the search space with these techniques on the diagonal units.
 
 ### Install
 
 This project requires **Python 3**.
 
-We recommend students install [Anaconda](https://www.continuum.io/downloads), a pre-packaged Python distribution that contains all of the necessary libraries and software for this project. 
+We recommend students install [Anaconda](https://www.continuum.io/downloads), a pre-packaged Python distribution that contains all of the necessary libraries and software for this project.
 Please try using the environment we provided in the Anaconda lesson of the Nanodegree.
 
 ##### Optional: Pygame

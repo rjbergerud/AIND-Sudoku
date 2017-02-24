@@ -51,23 +51,24 @@ def naked_twins(values):
     """
 
     def eliminate_value(values, unit, twin):
+        # Eliminate the naked twins as possibilities for their peers
         for box in unit:
             if(values[box] != twin):
                 assign_value(values, box, values[box].replace(twin[0], ''))
                 assign_value(values, box, values[box].replace(twin[1], ''))
 
     # Find all instances of naked twins
-    # Eliminate the naked twins as possibilities for their peers
     for unit in unitlist:
-        box_options = {} #this will hold counts candidate sequences found in box
+        box_options = {} #this will hold counts candidate sequences (twins) found in box
         for box in unit:
             if(len(values[box]) == 2):
-                double = values[box]
-                if(double not in box_options):
-                    box_options[double] = 0
-                box_options[double] += 1
-                if(box_options[double] == 2):
-                    eliminate_value(values, unit, double)
+                twin = values[box]
+                if(twin not in box_options):
+                    box_options[twin] = 0
+                box_options[twin] += 1
+                if(box_options[twin] == 2):
+                    #found a naked twin!
+                    eliminate_value(values, unit, twin)
         box_options = {}
     return values
 
