@@ -26,18 +26,12 @@ boxes = cross(rows, cols)
 
 #Adding diagonal_units should make it work for diagonal puzzles
 row_units = [cross(r, cols) for r in rows]
-col_units = [cross(rows, c) for c in cols]
-square_units = [cross(rs, cs) for rs in ['ABC', 'DEF', 'GHI'] for cs in ['123','456','789']]
-diagonal_units = [[rows[i] + cols[i] for i in range(0,9)],[rows[i] + cols[8 - i] for i in range(0,9)]]
-unitlist = row_units + col_units + square_units + diagonal_units #Array of units
-units = dict((s, [u for u in unitlist if s in u]) for s in boxes) # differents units belonging to s
-peers = dict((s, set(sum(units[s], [])) - set(s)) for s in boxes) # all elements in s's units save s
-
-row_units = [cross(r, cols) for r in rows]
 column_units = [cross(rows, c) for c in cols]
 square_units = [cross(rs, cs) for rs in ('ABC','DEF','GHI') for cs in ('123','456','789')]
-diagonal_units = [[rows[i] + cols[i] for i in range(0,9)],[rows[i] + cols[8 - i] for i in range(0,9)]]
-unitlist = row_units + col_units + square_units + diagonal_units #Array of units
+diagonal1 = [a[0] + a[1] for a in zip(rows, cols)]
+diagonal2 = [a[0] + a[1] for a in zip(rows, cols[::-1])]
+diagonal_units = [diagonal1, diagonal2]
+unitlist = row_units + column_units + square_units + diagonal_units #Array of units
 units = dict((s, [u for u in unitlist if s in u]) for s in boxes)
 peers = dict((s, set(sum(units[s],[]))-set([s])) for s in boxes)
 
@@ -132,7 +126,6 @@ def eliminate(values):
     for known in knowns:
         for peer in peers[known]:
             assign_value(values, peer, values[peer].replace(values[known], ''))
-            # values[peer] = values[peer].replace(values[known], '')
     return values
 
 def only_choice(values):
@@ -151,7 +144,6 @@ def only_choice(values):
             candidate_boxes = [box for box in unit if values[box].find(number) != -1]
             if len(candidate_boxes) == 1:
                 assign_value(values, candidate_boxes[0], number)
-                # values[candidate_boxes[0]] = number
     return values
 
 
